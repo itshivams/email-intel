@@ -1,0 +1,27 @@
+# Node.js
+js/node_modules/
+js/dist/
+js/*.log
+
+# Go
+go/cmd/email-intel/email-intel
+go/email-intel
+*.exe
+
+# Python
+python/__pycache__/
+python/*.py[cod]
+python/*$py.class
+python/build/
+python/dist/
+python/**/*.egg-info/
+python/.pytest_cache/
+python/.venv/
+python/venv/
+python/env/
+
+# IDE and OS
+.DS_Store
+.idea/
+.vscode/
+*.swp

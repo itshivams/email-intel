@@ -1,0 +1,185 @@
+package mailverify
+
+import (
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"net"
+	"net/http"
+	"strings"
+	"sync"
+)
+
+type Result struct {
+	Email              string `json:"email"`
+	Domain             string `json:"domain"`
+	Valid              bool   `json:"valid"`
+	Provider           string `json:"provider"`
+	ProviderConfidence int    `json:"providerConfidence"`
+	MX                 bool   `json:"mx"`
+	SPF                bool   `json:"spf"`
+	DKIM               bool   `json:"dkim"`
+	DMARC              bool   `json:"dmarc"`
+	Disposable         bool   `json:"disposable"`
+	PublicProvider     bool   `json:"publicProvider"`
+	BusinessEmail      bool   `json:"businessEmail"`
+	CatchAll           bool   `json:"catchAll"`
+	Risk               string `json:"risk"`
+	Confidence         int    `json:"confidence"`
+}
+
+var (
+	cachedDisposable = make(map[string]bool)
+	cachedPublic     = make(map[string]bool)
+	listsFetched     bool
+	mu               sync.Mutex
+)
+
+var fallbackDisposable = []string{
+	"10minutemail.com", "dispostable.com", "guerrillamail.com", "mailinator.com",
+	"tempmail.com", "temp-mail.org", "yopmail.com",
+}
+
+var fallbackPublic = []string{
+	"aol.com", "gmail.com", "googlemail.com", "hotmail.com", "icloud.com", "live.com",
+	"mail.com", "msn.com", "outlook.com", "proton.me", "protonmail.com", "yahoo.com", "zoho.com",
+}
+
+func fetchLists() {
+	mu.Lock()
+	defer mu.Unlock()
+	if listsFetched {
+		return
+	}
+
+	fetchAndPopulate := func(url string, cache map[string]bool, fallback []string) {
+		resp, err := http.Get(url)
+		var domains []string
+		if err == nil && resp.StatusCode == 200 {
+			body, _ := ioutil.ReadAll(resp.Body)
+			json.Unmarshal(body, &domains)
+			resp.Body.Close()
+		}
+		if len(domains) == 0 {
+			domains = fallback
+		}
+		for _, d := range domains {
+			cache[strings.ToLower(d)] = true
+		}
+	}
+
+	fetchAndPopulate("https://raw.githubusercontent.com/itshivams/mailverify/main/data/disposable.json", cachedDisposable, fallbackDisposable)
+	fetchAndPopulate("https://raw.githubusercontent.com/itshivams/mailverify/main/data/free.json", cachedPublic, fallbackPublic)
+	listsFetched = true
+}
+
+func inferProvider(mxRecords []*net.MX) (string, int) {
+	mxStr := ""
+	for _, mx := range mxRecords {
+		mxStr += strings.ToLower(mx.Host) + " "
+	}
+	
+	if strings.Contains(mxStr, "google.com") || strings.Contains(mxStr, "googlemail.com") {
+		return "Google Workspace", 98
+	}
+	if strings.Contains(mxStr, "mail.protection.outlook.com") {
+		return "Microsoft 365", 98
+	}
+	if strings.Contains(mxStr, "secureserver.net") {
+		return "GoDaddy", 95
+	}
+	if strings.Contains(mxStr, "zoho.com") {
+		return "Zoho Mail", 95
+	}
+	if strings.Contains(mxStr, "protonmail.ch") || strings.Contains(mxStr, "protonmail.com") {
+		return "Proton Mail", 95
+	}
+	if strings.Contains(mxStr, "yandex.net") {
+		return "Yandex", 95
+	}
+	if strings.Contains(mxStr, "fastmail.com") {
+		return "Fastmail", 95
+	}
+
+	return "Unknown", 0
+}
+
+func hasRecord(records []string, prefix string) bool {
+	for _, r := range records {
+		if strings.Contains(r, prefix) {
+			return true
+		}
+	}
+	return false
+}
+
+func Analyze(email string) (*Result, error) {
+	parts := strings.Split(email, "@")
+	if len(parts) != 2 {
+		return nil, fmt.Errorf("invalid email format")
+	}
+	domain := strings.ToLower(strings.TrimSpace(parts[1]))
+
+	fetchLists()
+
+	isDisposable := cachedDisposable[domain]
+	isPublic := cachedPublic[domain]
+
+	mxRecords, _ := net.LookupMX(domain)
+	txtRecords, _ := net.LookupTXT(domain)
+	dmarcRecords, _ := net.LookupTXT("_dmarc." + domain)
+	
+	dkimProbes := []string{}
+	for _, selector := range []string{"google", "default"} {
+		dkim, _ := net.LookupTXT(selector + "._domainkey." + domain)
+		dkimProbes = append(dkimProbes, dkim...)
+	}
+
+	mx := len(mxRecords) > 0
+	spf := hasRecord(txtRecords, "v=spf1")
+	dmarc := hasRecord(dmarcRecords, "v=DMARC1")
+	dkim := len(dkimProbes) > 0
+
+	provider, providerConf := inferProvider(mxRecords)
+	
+	score := 0
+	if mx { score += 30 }
+	if spf { score += 20 }
+	if dkim { score += 15 }
+	if dmarc { score += 15 }
+	if !isDisposable { score += 10 }
+	score += 10 // Assuming no catchAll for now
+
+	risk := "high"
+	if score >= 80 && !isDisposable {
+		risk = "low"
+	} else if score >= 50 {
+		risk = "medium"
+	}
+	if isDisposable {
+		risk = "high"
+	}
+
+	finalProvider := provider
+	if isPublic && provider == "Unknown" {
+		finalProvider = "Public Webmail"
+	}
+
+	return &Result{
+		Email:              email,
+		Domain:             domain,
+		Valid:              mx && !isDisposable,
+		Provider:           finalProvider,
+		ProviderConfidence: providerConf,
+		MX:                 mx,
+		SPF:                spf,
+		DKIM:               dkim,
+		DMARC:              dmarc,
+		Disposable:         isDisposable,
+		PublicProvider:     isPublic,
+		BusinessEmail:      !isPublic && !isDisposable,
+		CatchAll:           false,
+		Risk:               risk,
+		Confidence:         score,
+	}, nil
+}
