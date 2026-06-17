@@ -36,8 +36,8 @@ async function fetchLists() {
 
   try {
     const [dispRes, pubRes] = await Promise.all([
-      fetch('https://raw.githubusercontent.com/itshivams/mailverify/main/data/disposable.json').catch(() => null),
-      fetch('https://raw.githubusercontent.com/itshivams/mailverify/main/data/free.json').catch(() => null)
+      fetch('https://raw.githubusercontent.com/itshivams/email-intel/main/data/disposable.json').catch(() => null),
+      fetch('https://raw.githubusercontent.com/itshivams/email-intel/main/data/free.json').catch(() => null)
     ]);
 
     if (dispRes && dispRes.ok) {

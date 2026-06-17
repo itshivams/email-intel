@@ -23,13 +23,13 @@ def fetch_lists():
         return
 
     try:
-        r1 = requests.get("https://raw.githubusercontent.com/itshivams/mailverify/main/data/disposable.json", timeout=5)
+        r1 = requests.get("https://raw.githubusercontent.com/itshivams/email-intel/main/data/disposable.json", timeout=5)
         _cached_disposable = set(r1.json()) if r1.status_code == 200 else FALLBACK_DISPOSABLE
     except:
         _cached_disposable = FALLBACK_DISPOSABLE
 
     try:
-        r2 = requests.get("https://raw.githubusercontent.com/itshivams/mailverify/main/data/free.json", timeout=5)
+        r2 = requests.get("https://raw.githubusercontent.com/itshivams/email-intel/main/data/free.json", timeout=5)
         _cached_public = set(r2.json()) if r2.status_code == 200 else FALLBACK_PUBLIC
     except:
         _cached_public = FALLBACK_PUBLIC

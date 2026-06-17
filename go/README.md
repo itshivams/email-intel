@@ -1,4 +1,4 @@
-# mailverify (Go)
+# email-intel (Go)
 
 Enterprise standard email intelligence and verification library for Go.
 
@@ -15,7 +15,7 @@ Reliably detect email providers, verify MX and SPF/DMARC records, and identify d
 ## Installation
 
 ```bash
-go get github.com/itshivams/mailverify/go
+go get github.com/itshivams/email-intel/go
 ```
 
 ## Usage
@@ -27,11 +27,11 @@ package main
 
 import (
 	"fmt"
-	"github.com/itshivams/mailverify/go"
+	"github.com/itshivams/email-intel/go"
 )
 
 func main() {
-	result, err := mailverify.Analyze("john@acme.com")
+	result, err := email-intel.Analyze("john@acme.com")
 	if err != nil {
 		panic(err)
 	}
@@ -47,7 +47,7 @@ func main() {
 You can also use the package globally as a CLI tool:
 
 ```bash
-go install github.com/itshivams/mailverify/go/cmd/email-intel@latest
+go install github.com/itshivams/email-intel/go/cmd/email-intel@latest
 
 email-intel john@acme.com
 ```

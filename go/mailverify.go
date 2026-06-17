@@ -1,4 +1,4 @@
-package emailintel
+package email-intel
 
 import (
 	"encoding/json"
