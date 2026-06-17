@@ -210,13 +210,31 @@ email-intel test@itshivam.in`,
   return (
     <>
       <Head>
-        <title>Email-Intel - High-Performance Email Verification & Intelligence</title>
+        <title>Email Intel - High-Performance Email Verification & Intelligence</title>
         <meta
           name="description"
           content="The ultimate open-source email verification library for JavaScript, Python, and Go. Real-time MX probing, disposable email detection, and provider inference."
         />
+        <meta name="keywords" content="email verification, email validation, disposable email detector, mx lookup, spf audit, dmarc audit, go, python, typescript, nodejs, email intelligence" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>" />
+        
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://email-intel.itshivam.in" />
+        <meta property="og:title" content="Email Intel - High-Performance Email Verification & Intelligence" />
+        <meta property="og:description" content="Verify MX records, detect disposable domains, audit DNS security (SPF, DMARC), and infer providers instantly. Perfect parity across JS, Go, and Python." />
+        <meta property="og:image" content="https://raw.githubusercontent.com/itshivams/email-intel/main/.github/assets/banner.jpeg" />
+
+        {/* Twitter */}
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content="https://email-intel.itshivam.in" />
+        <meta property="twitter:title" content="Email Intel - High-Performance Email Verification & Intelligence" />
+        <meta property="twitter:description" content="Verify MX records, detect disposable domains, audit DNS security (SPF, DMARC), and infer providers instantly. Perfect parity across JS, Go, and Python." />
+        <meta property="twitter:image" content="https://raw.githubusercontent.com/itshivams/email-intel/main/.github/assets/banner.jpeg" />
+
+        {/* Favicon */}
+        <link rel="icon" href="/favicon.png" type="image/png" />
+        <link rel="canonical" href="https://email-intel.itshivam.in" />
       </Head>
 
       {/* Navigation */}
@@ -807,8 +825,17 @@ email-intel test@itshivam.in`,
             <span className="neo-border-sm bg-neo-yellow px-3 py-1 text-sm font-extrabold uppercase shadow-neo-sm w-fit">
               EMAIL-INTEL
             </span>
-            <p className="text-xs font-bold text-zinc-500 uppercase mt-2">
-              © {new Date().getFullYear()} Shivam. MIT License.
+            <p className="text-xs font-bold text-zinc-500 uppercase mt-2 flex items-center gap-1 flex-wrap">
+              <span>© {new Date().getFullYear()}</span>
+              <a
+                href="https://itshivam.in"
+                target="_blank"
+                rel="noreferrer"
+                className="neo-border-sm bg-neo-yellow text-black px-1.5 py-0.5 text-[10px] font-black shadow-neo-sm hover:translate-y-[-1px] hover:shadow-neo transition-all duration-100 inline-block uppercase"
+              >
+                Shivam ↗
+              </a>
+              <span>. MIT License.</span>
             </p>
           </div>
 
