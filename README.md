@@ -1,2 +1,2 @@
-# mailverify
+# Email-Intel
 

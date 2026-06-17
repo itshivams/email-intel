@@ -5,7 +5,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/itshivams/mailverify/go"
+	"github.com/itshivams/email-intel"
 )
 
 func main() {
@@ -16,7 +16,7 @@ func main() {
 	email := os.Args[1]
 
 	fmt.Printf("Analyzing %s...\n", email)
-	result, err := mailverify.Analyze(email)
+	result, err := emailintel.Analyze(email)
 	if err != nil {
 		fmt.Printf("\033[31mError analyzing email: %v\033[0m\n", err)
 		os.Exit(1)
