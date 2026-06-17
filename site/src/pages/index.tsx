@@ -210,14 +210,14 @@ email-intel test@itshivam.in`,
   return (
     <>
       <Head>
-        <title>Email Intel - High-Performance Email Verification & Intelligence</title>
+        <title>Email Intel</title>
         <meta
           name="description"
           content="The ultimate open-source email verification library for JavaScript, Python, and Go. Real-time MX probing, disposable email detection, and provider inference."
         />
         <meta name="keywords" content="email verification, email validation, disposable email detector, mx lookup, spf audit, dmarc audit, go, python, typescript, nodejs, email intelligence" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        
+
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://email-intel.itshivam.in" />
