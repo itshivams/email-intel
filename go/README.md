@@ -1,6 +1,17 @@
-# email-intel (Go)
+<div align="center">
+  <img src="../.github/assets/banner.png" alt="Email-Intel Banner" width="100%" />
 
-Enterprise standard email intelligence and verification library for Go applications and CLI.
+  <br />
+
+  <p><b>The Ultimate Enterprise-Standard Email Verification & Intelligence Library for Go</b></p>
+
+  [![Go Reference](https://pkg.go.dev/badge/github.com/itshivams/email-intel.svg)](https://pkg.go.dev/github.com/itshivams/email-intel)
+  [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](https://opensource.org/licenses/MIT)
+
+  <p>🌐 <b>Website:</b> <a href="https://email-intel.itshivam.in">email-intel.itshivam.in</a></p>
+</div>
+
+---
 
 This library is primarily focused on **checking if an email is valid**, **checking if it's a temp/disposable email**, and inferring the underlying email provider (e.g. Google Workspace, Microsoft 365, Zoho) with deep DNS analysis.
 
@@ -11,6 +22,24 @@ This library is primarily focused on **checking if an email is valid**, **checki
 - **Provider Inference**: Identifies enterprise security gateways and providers like Proofpoint, Mimecast, Google Workspace, Microsoft 365, Zoho, etc.
 - **Domain Classification**: Intelligently classifies domains into `Education`, `Government`, `Organization`, `Public Webmail`, or `Business` based on TLDs and regex.
 - **Performance**: High-speed, concurrent DNS probing utilizing Go's native `net` package.
+
+---
+
+## 📊 Intelligence Report Schema
+
+When you analyze an email address (e.g., `test@itshivam.in`), the library returns a comprehensive intelligence report. Here is the data dictionary and an example of the return values:
+
+| Field | Type | Example Value | Description |
+|---|---|---|---|
+| `Email` | string | `"test@itshivam.in"` | The email address that was analyzed. |
+| `Domain` | string | `"itshivam.in"` | The extracted domain. |
+| `Valid` | boolean | `true` | **True** if the domain has MX records and is not disposable. |
+| `Provider` | string | `"Zoho Mail"` | The detected email provider behind the domain. |
+| `Type` | string | `"Business"` | Categorization (e.g., `Business`, `Public Webmail`, `Education`). |
+| `MX` / `SPF` / `DMARC` | boolean | `true` | **True** if the respective DNS security records were found. |
+| `Disposable` | boolean | `false` | **True** if the domain belongs to a temporary/burn-after-reading email service. |
+| `Risk` | string | `"low"` | Assessed risk level (`low`, `medium`, `high`) based on the score. |
+| `Score` | number | `100` | A score out of 100 indicating the trustworthiness of the email address. |
 
 ## Installation
 

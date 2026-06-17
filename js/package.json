@@ -1,6 +1,6 @@
 {
   "name": "email-intel",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Enterprise standard email intelligence - MX, SPF, DMARC, disposable, and public provider checks.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -27,7 +27,14 @@
     "spf",
     "dmarc",
     "disposable",
-    "intelligence"
+    "intelligence",
+    "email-validation",
+    "email-verification",
+    "temp-mail-detector",
+    "disposable-email",
+    "domain-intelligence",
+    "mx-lookup",
+    "email-security"
   ],
   "author": "",
   "license": "MIT"
