@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="./.github/assets/banner.jpeg" alt="Email-Intel Banner" width="100%" />
+  <img src="https://raw.githubusercontent.com/itshivams/email-intel/main/.github/assets/banner.jpeg" alt="Email-Intel Banner" width="100%" />
 
   <br />
 
