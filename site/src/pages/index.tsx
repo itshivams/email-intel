@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Head from "next/head";
 import Image from "next/image";
 import { analyze, EmailIntelResult } from "email-intel";
+import SponsorModal from "../components/SponsorModal";
 
 
 export default function Home() {
@@ -11,6 +12,7 @@ export default function Home() {
   const [result, setResult] = useState<EmailIntelResult | null>(null);
   const [copiedText, setCopiedText] = useState<string | null>(null);
   const [activeCodeTab, setActiveCodeTab] = useState<"js" | "go" | "python" | "cli">("js");
+  const [isSponsorModalOpen, setIsSponsorModalOpen] = useState(false);
 
   const logTimerRef = useRef<NodeJS.Timeout[]>([]);
 
@@ -262,9 +264,18 @@ email-intel test@itshivam.in`,
             <a href="#contributing" className="font-bold uppercase tracking-wide border-b-2 border-transparent hover:border-black py-1 transition-all">
               Contributing
             </a>
+            <a href="#sponsors" className="font-bold uppercase tracking-wide border-b-2 border-transparent hover:border-black py-1 transition-all">
+              Sponsors
+            </a>
           </div>
 
           <div className="flex items-center gap-3">
+            <button
+              onClick={() => setIsSponsorModalOpen(true)}
+              className="neo-border-sm bg-neo-pink px-4 py-2 text-sm font-extrabold uppercase tracking-wider shadow-neo-sm neo-btn-hover flex items-center gap-1.5 cursor-pointer text-black"
+            >
+              💖 Sponsor
+            </button>
             <a
               href="https://github.com/itshivams/email-intel"
               target="_blank"
@@ -816,6 +827,66 @@ email-intel test@itshivam.in`,
           </div>
         </section>
 
+        {/* MY SPONSORS SECTION */}
+        <section id="sponsors" className="py-16 flex flex-col gap-10">
+          <div className="text-center flex flex-col items-center gap-3">
+            <h2 className="text-3xl font-black uppercase md:text-5xl inline-block bg-neo-yellow text-black px-4 py-1 border-4 border-black transform rotate-1">
+              My Sponsors
+            </h2>
+            <p className="max-w-2xl font-bold text-black uppercase text-sm">
+              Supporting open source software &amp; active package development.
+            </p>
+          </div>
+
+          <div className="grid gap-8 md:grid-cols-12 max-w-4xl mx-auto w-full">
+            {/* Main callout */}
+            <div className="md:col-span-8 neo-border bg-[#fdf2f8] p-6 md:p-8 shadow-neo-lg flex flex-col justify-between gap-6 hover:translate-y-[-2px] hover:shadow-neo-xl transition-all">
+              <div className="flex flex-col gap-4 text-black">
+                <span className="neo-border-sm bg-neo-pink text-black font-extrabold px-3 py-1 text-xs shadow-neo-sm w-fit uppercase">
+                  Support the project
+                </span>
+                <h3 className="text-2xl font-black uppercase tracking-tight">Become a sponsor</h3>
+                <p className="text-sm text-zinc-800 font-bold leading-relaxed">
+                  Your sponsorship helps maintain feature parity across JavaScript, Python, and Go, updates disposable domain blacklists weekly, and keeps the DNS resolution tool fast and free.
+                </p>
+              </div>
+              <div>
+                <button
+                  onClick={() => setIsSponsorModalOpen(true)}
+                  className="neo-border bg-neo-yellow hover:bg-neo-yellow/85 text-black font-black uppercase text-sm py-3 px-6 shadow-neo neo-btn-hover cursor-pointer"
+                >
+                  💖 Sponsor via Razorpay
+                </button>
+              </div>
+            </div>
+
+            {/* List of current sponsors */}
+            <div className="md:col-span-4 neo-border bg-white p-6 shadow-neo-lg flex flex-col justify-between gap-4 text-black">
+              <div className="flex flex-col gap-3">
+                <span className="neo-border-sm bg-neo-green text-black font-extrabold px-3 py-1 text-xs shadow-neo-sm w-fit uppercase">
+                  Sponsors List
+                </span>
+                <h4 className="text-lg font-black uppercase">Current Sponsors</h4>
+                
+                {/* Empty State / Call to Action */}
+                <div className="flex flex-col gap-2 py-4 text-center border-2 border-dashed border-zinc-300 rounded-none bg-zinc-50">
+                  <span className="text-3xl">✨</span>
+                  <p className="text-xs font-bold text-zinc-500 uppercase px-2">
+                    Your name here!
+                  </p>
+                  <p className="text-[10px] text-zinc-400 font-bold uppercase px-4">
+                    Sponsor this tool to show your support.
+                  </p>
+                </div>
+              </div>
+
+              <div className="text-[10px] font-bold text-zinc-500 uppercase text-center">
+                Autoupdated weekly
+              </div>
+            </div>
+          </div>
+        </section>
+
       </main>
 
       {/* FOOTER */}
@@ -839,10 +910,16 @@ email-intel test@itshivam.in`,
             </p>
           </div>
 
-          <div className="flex gap-6 font-bold text-xs uppercase">
+          <div className="flex gap-6 font-bold text-xs uppercase text-black">
             <a href="#features" className="hover:underline">Features</a>
             <a href="#ecosystem" className="hover:underline">Ecosystems</a>
             <a href="#usage" className="hover:underline">Docs</a>
+            <button
+              onClick={() => setIsSponsorModalOpen(true)}
+              className="hover:underline font-bold uppercase cursor-pointer"
+            >
+              Sponsor
+            </button>
             <a href="https://github.com/itshivams/email-intel" className="hover:underline">GitHub</a>
           </div>
 
@@ -851,6 +928,11 @@ email-intel test@itshivam.in`,
           </div>
         </div>
       </footer>
+
+      <SponsorModal
+        isOpen={isSponsorModalOpen}
+        onClose={() => setIsSponsorModalOpen(false)}
+      />
     </>
   );
 }
